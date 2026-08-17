@@ -1,0 +1,9 @@
+external css
+ make css file 
+ import css file in main.jsx
+ use
+
+ component (components are tage made my us)
+   user made tag
+   first letter of user made tag must be capital letter 
+   as in html all are small 
