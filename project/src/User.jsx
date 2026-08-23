@@ -94,3 +94,10 @@ let User = () => {
 
 export default User;
 //components are tage made my us likrUser Product
+// return (
+//   <div>
+//     {data.map((item,i) => {
+
+//     })}
+//   </div>
+// )
