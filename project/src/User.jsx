@@ -61,13 +61,13 @@ let User = () => {
   // };
 
   return (
-    <div>
+    <div className="new">
       {data.map((item, i) => {
         return (
           <div>
             <img src="{item.photo}" width="200px" height="200px" />
-            <p>name is {item.name}</p>
-            <p>name is {item.age}</p>
+            <p className="success">name is {item.name}</p>
+            <p className="error">name is {item.age}</p>
             <p>address is {item.address}</p>
           </div>
         );
