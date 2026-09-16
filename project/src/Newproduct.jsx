@@ -9,3 +9,4 @@ const Newproduct = () => {
 };
 
 export default Newproduct;
+    
