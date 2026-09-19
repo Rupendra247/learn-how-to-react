@@ -1,9 +1,219 @@
-external css
- make css file 
- import css file in main.jsx
- use
+====================================================================
+  REACT LEARNING NOTES - EVERYTHING LEARNED TILL NOW
+====================================================================
 
- component (components are tage made my us)
-   user made tag
-   first letter of user made tag must be capital letter 
-   as in html all are small 
+----------------------------------------------------------------------
+PART 1: WHAT HAPPENS WHEN WE RUN "npm run dev"?
+----------------------------------------------------------------------
+1. npm run dev runs the "dev" script in project/package.json:
+   "scripts": { "dev": "vite" }  -> so vitae (vite) dev server starts.
+
+2. Vite reads project/index.html. Inside it there is:
+   <div id="root"></div>  and  <script type="module" src="/src/main.jsx">
+
+3. Vite loads main.jsx. main.jsx is the ENTRY POINT of the app.
+   EVERYTHING starts from this file.
+
+4. main.jsx does these things (in order):
+   - imports React stuff: StrictMode, createRoot
+   - imports css files: "./index.css" and "./global.css"
+   - imports all components (App, User, Newproduct, Job,
+     LearnTernaryOperater, UserState)
+   - imports BrowserRouter from react-router-dom
+   - createRoot(document.getElementById("root")).render(<App />)
+     -> this RENDERS the App component into the #root div.
+
+5. main.jsx is WRAPPED in <BrowserRouter> so that routing works.
+   Everything inside BrowserRouter can use NavLink/useNavigate/etc.
+
+6. IMPORTANT BEGINNER TIP ABOUT main.jsx:
+   Most components are commented out with {/* */}. Currently <Form2 />
+   is ACTIVE (that is why the job form shows on screen). To test another
+   component, comment <Form2 /> and un-comment the one you want, then
+   save. The browser updates itself (Hot Module Replacement).
+
+7. So the full chain for npm run dev is:
+   index.html -> main.jsx -> App.jsx -> SunwayLink + SunwayRoute
+   -> pages (User / Job / ReadAllProduct)
+   (currently main.jsx renders <Form2 /> instead of <App />)
+
+----------------------------------------------------------------------
+PART 2: HOW TO READ THE PROJECT (CORRECT ORDER FOR BEGINNERS)
+----------------------------------------------------------------------
+1. START FROM src/main.jsx  (the entry point / boot up file)
+2. Then src/App.jsx        (parent component that assembles everything)
+3. Then src/SunwayLink.jsx (the nav bar: NavLink + useNavigate)
+4. Then src/SunwayRoute.jsx (the route map: which URL -> which page)
+5. Then the pages: ReadAllProduct.jsx, User.jsx, Job.jsx
+6. Forms: src/form1.jsx (controlled form, all inputs using state)
+          src/form2.jsx (job form being built)
+7. Last: src/userstate/UserState.jsx (useState example, not in App)
+
+Mental model / flow:
+  main.jsx
+    -> App.jsx
+      -> SunwayLink (navigation links)
+      -> SunwayRoute (Routes + Route definitions)
+        -> pages: /product -> ReadAllProduct
+                 /user    -> User
+                 /job     -> Job
+
+----------------------------------------------------------------------
+PART 3: TOPICS LEARNED TILL NOW (A TO Z)
+----------------------------------------------------------------------
+[1] PROJECT SETUP
+  - Vite is the build tool. React 19. react-router-dom v7.
+  - index.html has <div id="root"> where React puts everything.
+
+[2] COMPONENTS (user-made tags)
+  - A component is a function that returns JSX.
+  - Example: const User = () => { return <div>...</div> }
+  - First letter MUST be CAPITAL (User, Product, Job).
+    HTML tags are all lowercase (div, p, img).
+  - Export:  export default User;
+  - Import:  import User from "./User.jsx";
+  - Use:     <User />  or  <User></User>
+
+[3] JSX AND EXPRESSIONS { }
+  - Use curly braces {} to put JavaScript inside JSX.
+  - Examples:
+      {name} {sirname}
+      {1 + 1}
+      style={{ backgroundColor: "green" }}   (inline style, camelCase)
+  - className is used instead of "class".
+      <p className="success">text</p>
+
+[4] EXTERNAL CSS
+  - Create a css file (example: global.css)
+  - Import it in main.jsx:  import "./global.css";
+  - Define classes: .success { background-color: green; color: white }
+  - Use with className="success"
+  - (notes written in old index.txt were about this topic)
+
+[5] RENDERING LISTS WITH .map()
+  - Make an array of objects:
+      let data = [ {id:1, name:"ram", age:30}, ... ]
+  - Loop and render with .map:
+      data.map((item, i) => { return <p>{item.name}</p> })
+  - item = each object, i = index number.
+  - Called on money use in User.jsx to print cards of users.
+
+[6] PROPS (passing data to components)
+  - Passing:  <Job title="developer" location="kathmandu" />
+  - Receiving with destructuring:
+      const Job = ({ title, location }) => { ... }
+  - Then use {title} and {location} in JSX.
+
+[7] CONDITIONAL RENDERING - TERNARY OPERATOR
+  - {condition ? "true result" : "false result"}
+  - Example: {age >= 18 ? "can vote" : "cannot vote"}
+
+[8] STATE - useState HOOK
+  - import { useState } from "react";
+  - const [variable, setVariable] = useState(initialValue);
+      Example: const [t, setT] = useState("password");
+  - To change state use the setter: setT("text");
+  - Events: onClick={() => { ... }}
+  - Real example: show/hide password
+      <input type={t} />
+      <button onClick={() => setT(t === "password" ? "text" : "password")}>
+        eye
+      </button>
+
+[9] REACT ROUTER (react-router-dom)
+  - import { BrowserRouter } from "react-router-dom";
+  - BrowserRouter wraps the whole app in main.jsx.
+  - import { NavLink, useNavigate } from "react-router-dom";
+  - import { Route, Routes } from "react-router-dom";
+  - import { useParams } from "react-router-dom";
+
+  a) ROUTES:
+     <Routes>
+       <Route path="/product" element={<ReadAllProduct />} />
+       <Route path="/user" element={<User />} />
+       <Route path="/job" element={<Job />} />
+     </Routes>
+     -> visiting /product shows ReadAllProduct, /user shows User, etc.
+
+  b) NavLink (clickable link):
+     <NavLink style={{margin:"10px"}} to="/product">Product</NavLink>
+
+  c) useNavigate (go to a route with a button):
+     let navigate = useNavigate();
+     <button onClick={() => navigate("/login")}>login</button>
+
+d) useParams (read the :id from the URL - PARTLY LEARNED):
+      let params = useParams();
+      console.log(params.id);
+      NOTE: our routes don't have :id yet, so this is a starter/stub.
+
+[10] FORMS IN REACT (src/form1.jsx and src/form2.jsx)
+
+   a) CONTROLLED FORM (form1.jsx):
+      Every input gets its own piece of state, so React owns the value:
+        let [name, setName] = useState("");
+        let [email, setEmail] = useState("");
+        let [password, setPassword] = useState("");
+        let [address, setAddress] = useState("");
+      - On every keystroke, onChange grabs the value and saves it:
+          <input type="text" onChange={(e) => setName(e.target.value)} />
+        (e = event, e.target = the input, e.target.value = typed text)
+      - The form handles submit with a function + preventDefault:
+          <form onSubmit={handleSubmit}>
+          const handleSubmit = (e) => {
+            e.preventDefault();           // stops page reload
+            console.log(name, email, password, address);  // use data
+          };
+      - This is called a CONTROLLED component: React state drives input.
+
+   b) UNCONTROLLED / STATIC FORM (form2.jsx):
+      - Just layout for now: labels + inputs with nothing connected yet.
+      - To-do comment at the bottom shows the fields to build for a
+        "Job" form: job title (text), location (text), salary
+        (number type), experience (number type).
+      - Next step: same pattern as form1 - give each input a useState
+        and log them on submit.
+
+----------------------------------------------------------------------
+PART 4: IMPORTANT EXTRA THINGS FOR BEGINNERS
+----------------------------------------------------------------------
+1. main.jsx barely changes in real projects. Most coding happens in
+   components. main.jsx = "glue" that imports css + the root component.
+
+2. StrictMode makes React run in a safe development mode (kept in app).
+
+3. Only ONE default export per file. That is what import picks up.
+
+4. Don't worry about the huge commented index.css / App.css blocks -
+   those are from the Vite template and are not used right now.
+
+5. THINGS STILL BROKEN / INCOMPLETE (good revision targets):
+   - Learnuserstate.jsx line 1:
+       import React, { userState } from "react";  (WRONG - lowercase)
+       Should be: import { useState } from "react";
+   - User.jsx line 68:
+       <img src="{item.photo}" />  (WRONG - the { } is inside quotes)
+       Should be: <img src={item.photo} />
+   - ReadAllProduct.jsx only logs params; no route uses :id yet.
+   - Learnuserstate.jsx function body is empty (nothing renders).
+   - form2.jsx is unfinished: it is only the layout of a job form.
+     Switch main.jsx to <Form1 /> to see a working controlled form.
+
+6. HOW TO TEST A TOPIC QUICKLY:
+   - In main.jsx, comment the active component (<Form2 /> for now),
+     un-comment e.g. <UserState />, save, browser updates instantly.
+   - Revert it back after testing so the intended screen stays active.
+
+7. HOW TO CHECK WHAT IS RUNNING:
+   - npm run dev prints a URL (usually http://localhost:5173).
+   - Open that URL in the browser. The console shows errors (F12).
+
+8. REACT COMPONENT HINTS:
+   - A component must return ONE top-level element (wrap multiple
+     tags in one <div>).
+   - Arrow function style is used everywhere here:  const X = () => {}
+   - Every file imports React or the hooks it needs.
+
+====================================================================
+  END OF NOTES
+====================================================================
