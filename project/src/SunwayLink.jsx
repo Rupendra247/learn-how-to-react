@@ -5,14 +5,17 @@ const SunwayLink = () => {
   let navigate = useNavigate();
   return (
     <div>
+      <NavLink style={{ margin: "10px" }} to="/product/create">
+        Create Product
+      </NavLink>
       <NavLink style={{ margin: "10px" }} to="/product">
         Product
       </NavLink>
-      <NavLink style={{ margin: "10px" }} to="/job">
-        Job
+      <NavLink style={{ margin: "10px" }} to="/user/create">
+        Create User
       </NavLink>
       <NavLink style={{ margin: "10px" }} to="/user">
-        User
+         User
       </NavLink>
       <button
         onClick={() => {

@@ -15,14 +15,14 @@ import Form2 from "./form2.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      {/* <App /> */}
+      <App />
       {/* <User /> */}
       {/* <Newproduct /> */}
       {/* <Job title="developer" location="kathmandu"></Job> */}
       {/* <LearnTernaryOperater /> */}
       {/* <UserState /> */}
       {/* <Form1 /> */}
-      <Form2 />
+      {/* <Form2 /> */}
     </BrowserRouter>
   </StrictMode>
 );
